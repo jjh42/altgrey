@@ -1,5 +1,10 @@
 /* decode.S
 
+ * This file contains
+ *	readpins: which reads the 9 input pins of the stores the result in r16 and r17.
+ 		  - see the schematic for a good idea of how the pins are connected.
+        decodepins: takes the input pins read by readpins and decodes it using 3 tables
+        	  - to give a height which is stores in r16 & r17.
 
 */
 #include <avr/io.h>
@@ -9,8 +14,9 @@ readpins:
 		; Simple function - read pins off port & put in r16, r17.
 		; Pins c1-3 go in lowest bits of r16.
 		; D6 is c3
-		;LSBR17		MSB R16									LSB R16
-		;a1			a2		a3	b1 b2 b3	c1 c2 c3
+                ; This is how the final result should look in r16, r17
+		;LSBR17		MSB R16						LSB R16			LSB R16
+		;a1		a2		a3	b1 b2 b3	c1 c2 c3
 		in		r16, (PINB-__SFR_OFFSET)
 		in		r17, (PIND-__SFR_OFFSET)
 		; At the moments a1-3, b1-3 & c1-2 are in r16		
@@ -18,7 +24,7 @@ readpins:
 		bst	r17, 6
 		bld	r16, 0 ; Put c3 in place
 		; Now r16 is setup - use r17 to take care of a1
-		ldi		r17, 0
+		ldi	r17, 0
 		rol	r17		; Move carry into the lower bit
 		ret
 
@@ -89,6 +95,17 @@ HeightA:	.byte		0, 0, 			0, 40 | 0x80 , 	1, 20 | 0x80,		0, 80			/* Up to 120 */
 	/* Decode the height from the pins that are in r16, r17 and put the result in r16. r17 holds
 	 * an number which is added to the hundreds columns (to avoid having to use true 16 bit)
 	 * ie if the answer is 214(00) ft then r16 will have 14, & r17 will have 2.
+         * The pins that are in r16, r17 following the code described at the beginning of
+         * readpins.
+
+
+         This function works by break the coding into the 3 sections (a, b, c). So first a is looked up in a table
+         and the height from a is added to the total height. The total height begins at -12 because that is the lowest
+         that the altimeter can go. (NOTE: The height is stored in hundreds of ft and two zero's are only added later
+         when its displayed on the LCD). Next b is decode. There is a flag in a that states whether b is inverted or not
+         (b is alternatly inverted/not inverted for each step of a). If inverted the value from the b lookup is subtracted
+         from 35 (B's maximum value). Are b lookup, the c lookup is very similar. Note: If b is inverted then the flag
+         (INVERTC) is inverted.
 	 */
 decodepins:
 		; Height starts at -12

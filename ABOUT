@@ -1,8 +1,24 @@
 Documentation for this project:
-	
+AUTHORS:
+Jonathan Hunt <jhuntnz@users.sf.net>
+David Hunt <dhunt@users.sf.net>
 
+This project started when Darrol Lockhart asked me to make a device for use with grey
+code altimeters that would read in 9 pins (labeled a1-3, b1-3, c1-3) and decode the
+associated height and display it on a LCD display. See the Graycode?.jpg for a view
+of the grey code scheme. Only the pins a1-3, b1-3 & c1-3 were used - the others are
+ignored.
+The altimeteres output +12V on the pins when it is a 1 and 0V (GND) when 0.
+David designed the hardware (schematic in board.sch) for stepping down 12V to 5V
+and which uses an Atmel AVR2313 to do the decoding.
+The firmware on the AVR I original wrote in AVR C (using GNU's GCC port to the AVR).
+See altgrey.c for this original coding. Unfortunatly, this did not fit on the chip so I
+rewrote the code in assembly language. (decode.S, display.S lcd.S, main.S). The final
+assembly version of the code was written to be very simple & easy to debug. It does not
+use interrupts or timers -  it is very basic - using loops for delays when using the LCD.
+This is not a problem and made the code much simpler/smaller & easy to debug.
 
-Basically this was original written very elegantly in C, interrupt driven etc. 
+Basically this was original written very elegantly in C, interrupt driven etc.
 Unfortunately this did not fit on the chip so it was rewritten in a crude, main loop,
 non-interrupt driven assembly. This was a compromise between easy to write/debug (
 limited time), elegance and size.
@@ -10,3 +26,4 @@ limited time), elegance and size.
 Rules:
 As a compromise between niceness & smallness routines are allowed to use any registers
 they want (save registers before calling a routine).
+Arguments are passed in registers r16 & up.

@@ -1,7 +1,7 @@
 /* lcd.S
  *
  *
- *
+ *	This contains all the lower level code for writing to the LCD.
  * Functions:
  *		lcdputchar:	Put on character from r16 into LCD
  *		lcdputcontrolchar: Put 1 control character from r16 into LCD

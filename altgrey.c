@@ -1,5 +1,10 @@
 /***************************************************************************
-                          main.c  -  description
+
+NOTE; This file is not actually used anymore because the project was rewritten
+	in AVR Assembly to fit on chip - however it is useful for understanding
+        how decodegrey works.
+
+                          altgrey.c  -  description
                              -------------------
     begin                : Sat Apr 26 22:45:31 NZST 2003
     copyright            : (C) 2003 by Jonathan Hunt

@@ -1,5 +1,8 @@
 /* display.S
 
+ * displaystartmsg: The is a very basic routine which displays a startup screen.
+ * display: This accepts the pin coding in r16, r17 and the height in r18 and r19
+ 	    and displays it on the LCD.
 
 */
 
