@@ -1,0 +1,12 @@
+Documentation for this project:
+	
+
+
+Basically this was original written very elegantly in C, interrupt driven etc. 
+Unfortunately this did not fit on the chip so it was rewritten in a crude, main loop,
+non-interrupt driven assembly. This was a compromise between easy to write/debug (
+limited time), elegance and size.
+
+Rules:
+As a compromise between niceness & smallness routines are allowed to use any registers
+they want (save registers before calling a routine).
